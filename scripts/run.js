@@ -7,17 +7,24 @@ async function main() {
     console.log("Contract deployed to", contract.address);
     console.log("Contract deployed by", owner.address);
     
-    let waveCount = await contract.getTotalWaves();
+    let suggestionsCount = await contract.getSuggestionsCount();
     
-    let waveTxn = await contract.wave();
-    await waveTxn.wait();
+    let suggestionTxn = await contract.suggest("https://testtube.com/view?video=video-1");
+    await suggestionTxn.wait();
     
-    waveCount = await contract.getTotalWaves();
+    suggestionsCount = await contract.getSuggestionsCount();
     
-    waveTxn = await contract.connect(randomPerson).wave();
-    await waveTxn.wait();
+    suggestionTxn = await contract.connect(randomPerson).suggest("https://testtube.com/view?video=video-2");
+    await suggestionTxn.wait();
     
-    waveCount = await contract.getTotalWaves();
+    suggestionsCount = await contract.getSuggestionsCount();
+
+    await contract.listSuggestions();
+    
+    let likeTxn = await contract.like(1);
+    await likeTxn.wait();
+
+    await contract.listSuggestions();
 }
 
 async function runMain() {
